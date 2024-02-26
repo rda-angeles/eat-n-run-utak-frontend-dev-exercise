@@ -10,7 +10,13 @@ export interface ModalTypes {
   open: boolean;
 }
 
+export interface EditModalTypes {
+  openUpdateModal: boolean;
+  handleCloseUpdateModal: () => void;
+  handleOpenUpdateModal?: () => void;
+}
+
 export interface ComboBoxType {
   comboItems: [] | string[];
-  placeholder: string
+  placeholder: string;
 }

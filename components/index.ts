@@ -8,6 +8,7 @@ import Header from "./Header";
 import AddItemBtn from "./AddItemBtn";
 import Products from "./Products";
 import Modal from "./Modal";
+import EditModal from "./Modals/EditModal";
 
 export const drawerWidth = 240;
 
@@ -67,4 +68,4 @@ export const AddItemBtnComponent = styled(Button)<ButtonProps>(() => ({
   },
 }));
 
-export { Header, AddItemBtn, Products, Modal };
+export { Header, AddItemBtn, Products, Modal, EditModal };
