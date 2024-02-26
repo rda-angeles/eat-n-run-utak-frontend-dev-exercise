@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddItemBtnComponent } from "./";
 
 // Firebase
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/config/firebase";
 
 // Material ui
@@ -31,8 +31,17 @@ const style = {
   p: 4,
 };
 
-const Modal = ({ handleCloseModal, open }: ModalTypes) => {
-  const [newItem, setNewItem] = useState({
+const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
+  const [item, setItem] = useState({
+    name: "",
+    categ: "",
+    size: "",
+    price: "",
+    cost: "",
+    stock: "",
+  });
+
+  const [updateItem, setUpdateItem] = useState({
     name: "",
     categ: "",
     size: "",
@@ -46,21 +55,21 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
     // add item to firbase here
 
     if (
-      newItem.name !== "" &&
-      newItem.price !== "" &&
-      newItem.cost !== "" &&
-      newItem.stock !== ""
+      item.name !== "" &&
+      item.price !== "" &&
+      item.cost !== "" &&
+      item.stock !== ""
     ) {
       await addDoc(collection(db, "items"), {
-        name: newItem.name.trim(),
-        categ: newItem.categ.trim(),
-        size: newItem.size.trim(),
-        price: newItem.price.trim(),
-        cost: newItem.cost.trim(),
-        stock: newItem.stock.trim(),
+        name: item.name.trim(),
+        categ: item.categ.trim(),
+        size: item.size.trim(),
+        price: item.price.trim(),
+        cost: item.cost.trim(),
+        stock: item.stock.trim(),
       });
 
-      setNewItem({
+      setItem({
         name: "",
         categ: "",
         size: "",
@@ -73,26 +82,44 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
     }
   };
 
-  const newItemName = (e: any) => {
-    setNewItem({ ...newItem, name: e.target.value });
+  const updatedItem = async (id: string, event: any) => {
+    event.preventDefault();
+    const updateItemDoc = doc(db, "items", id);
+
+    await updateDoc(updateItemDoc, {
+      name: selectedItem.name,
+      categ: selectedItem.categ,
+      size: selectedItem.size,
+      price: selectedItem.price,
+      cost: selectedItem.cost,
+      stock: selectedItem.stock,
+    });
+  };
+
+  const itemName = (e: any) => {
+    if (selectedItem === undefined) {
+      setUpdateItem({ ...updateItem, name: e.target.value });
+    } else {
+      setItem({ ...item, name: e.target.value });
+    }
   };
   const selectedCateg = (e: any) => {
-    setNewItem({ ...newItem, categ: e.target.value });
+    setItem({ ...item, categ: e.target.value });
   };
   const selectedSize = (e: any) => {
-    setNewItem({ ...newItem, size: e.target.value });
+    setItem({ ...item, size: e.target.value });
   };
 
-  const newItemPrice = (e: any) => {
-    setNewItem({ ...newItem, price: e.target.value });
+  const itemPrice = (e: any) => {
+    setItem({ ...item, price: e.target.value });
   };
 
-  const newItemCost = (e: any) => {
-    setNewItem({ ...newItem, cost: e.target.value });
+  const itemCost = (e: any) => {
+    setItem({ ...item, cost: e.target.value });
   };
 
-  const newItemStock = (e: any) => {
-    setNewItem({ ...newItem, stock: e.target.value });
+  const itemStock = (e: any) => {
+    setItem({ ...item, stock: e.target.value });
   };
 
   return (
@@ -106,14 +133,20 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
         <Box sx={style}>
           <h2 className="text-xl font-bold">Add new product</h2>
 
-          <form onSubmit={addItem}>
+          <form
+            onSubmit={() =>
+              selectedItem === undefined
+                ? addItem
+                : updatedItem(selectedItem.id, event)
+            }
+          >
             {/* Item name */}
             <div>
               <p>Product name</p>
               <input
                 type="text"
-                value={newItem.name}
-                onChange={newItemName}
+                value={selectedItem === undefined ? item.name : updateItem.name}
+                onChange={itemName}
                 placeholder="Product name"
                 className="search-field"
               />
@@ -123,7 +156,9 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
             <div>
               <p>Product Category</p>
               <select
-                value={newItem.categ}
+                value={
+                  selectedItem === undefined ? item.categ : selectedItem.categ
+                }
                 onChange={selectedCateg}
                 id="food-category"
               >
@@ -139,7 +174,9 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
             <div>
               <p>Product Size</p>
               <select
-                value={newItem.size}
+                value={
+                  selectedItem === undefined ? item.size : selectedItem.size
+                }
                 onChange={selectedSize}
                 id="food-category"
               >
@@ -155,8 +192,10 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
               <p>Product price</p>
               <input
                 type="text"
-                onChange={newItemPrice}
-                value={newItem.price}
+                onChange={itemPrice}
+                value={
+                  selectedItem === undefined ? item.price : selectedItem.price
+                }
                 placeholder="Product price"
                 className="search-field"
               />
@@ -167,8 +206,10 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
               <p>Product cost</p>
               <input
                 type="text"
-                value={newItem.cost}
-                onChange={newItemCost}
+                value={
+                  selectedItem === undefined ? item.cost : selectedItem.cost
+                }
+                onChange={itemCost}
                 placeholder="Product cost"
                 className="search-field"
               />
@@ -179,8 +220,10 @@ const Modal = ({ handleCloseModal, open }: ModalTypes) => {
               <p>Amount in stock</p>
               <input
                 type="text"
-                value={newItem.stock}
-                onChange={newItemStock}
+                value={
+                  selectedItem === undefined ? item.stock : selectedItem.stock
+                }
+                onChange={itemStock}
                 placeholder="Product stock"
                 className="search-field"
               />

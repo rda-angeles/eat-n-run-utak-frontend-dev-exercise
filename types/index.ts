@@ -8,12 +8,7 @@ export interface ModalTypes {
   handleCloseModal: () => void;
   handleOpenModal?: () => void;
   open: boolean;
-}
-
-export interface EditModalTypes {
-  openUpdateModal: boolean;
-  handleCloseUpdateModal: () => void;
-  handleOpenUpdateModal?: () => void;
+  selectedItem?: any;
 }
 
 export interface ComboBoxType {

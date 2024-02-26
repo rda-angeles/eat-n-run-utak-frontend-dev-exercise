@@ -22,13 +22,17 @@ import {
 } from "@mui/material";
 
 import { Edit, Delete } from "@mui/icons-material";
-import { EditModal } from "@/components";
+import { Modal } from "@/components";
 
 export default function Products() {
   const [items, setNewItems] = useState<any[]>([]);
+  const [selectedItem, setSelectedItem] = useState({});
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
 
-  const handleOpenUpdateModal = () => setOpenUpdateModal(true);
+  const handleOpenUpdateModal = (item: {}) => {
+    setOpenUpdateModal(true);
+    setSelectedItem(item);
+  };
   const handleCloseUpdateModal = () => setOpenUpdateModal(false);
 
   const deleteItem = async (id: string) => {
@@ -101,7 +105,7 @@ export default function Products() {
                   <TableCell align="right">{item.cost}php</TableCell>
                   <TableCell align="right">{item.stock}</TableCell>
                   <TableCell align="right">
-                    <Button onClick={handleOpenUpdateModal}>
+                    <Button onClick={() => handleOpenUpdateModal(item)}>
                       <Edit color="action" />
                     </Button>
 
@@ -112,9 +116,10 @@ export default function Products() {
                 </TableRow>
               ))}
 
-              <EditModal
-                openUpdateModal={openUpdateModal}
-                handleCloseUpdateModal={handleCloseUpdateModal}
+              <Modal
+                open={openUpdateModal}
+                handleCloseModal={handleCloseUpdateModal}
+                selectedItem={selectedItem}
               />
             </TableBody>
           </Table>
