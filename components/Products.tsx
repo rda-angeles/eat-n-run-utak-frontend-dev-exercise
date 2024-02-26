@@ -1,19 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import { db } from "@/config/firebase";
 // MUI components
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Button, { ButtonProps } from "@mui/material/Button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from "@mui/material";
+
+import { Edit, Delete } from "@mui/icons-material";
 
 export default function Products() {
   const [items, setNewItems] = useState<any[]>([]);
+
+  const deleteItem = async (id: string) => {
+    await deleteDoc(doc(db, "items", id));
+  };
+
   useEffect(() => {
     const getProducts = async () => {
       const fbQuery = query(collection(db, "items"));
@@ -30,6 +45,7 @@ export default function Products() {
 
     getProducts();
   }, []);
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -73,7 +89,11 @@ export default function Products() {
               <TableCell align="right">{item.cost}php</TableCell>
               <TableCell align="right">{item.stock}</TableCell>
               <TableCell align="right">
-                <Button>Delete</Button>
+                <Edit color="action" />
+
+                <Button onClick={() => deleteItem(item.id)}>
+                  <Delete color="error" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
