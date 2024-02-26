@@ -26,14 +26,12 @@ const Header = ({ handleCloseModal, handleOpenModal, open }: ModalTypes) => {
       </div>
       <div className="grid gap-6 md:grid-cols-3 lg:max-w-[30rem] lg:gap-0">
         {salesSummaryContents.map(({ id, header, content }: HeaderTypes) => (
-          <>
-            <div key={id}>
-              <h5 className="text-gray-500 font-bold uppercase text-sm">
-                {header}
-              </h5>
-              <h2 className="text-xl font-bold">{content}</h2>
-            </div>
-          </>
+          <div key={id}>
+            <h5 className="text-gray-500 font-bold uppercase text-sm">
+              {header}
+            </h5>
+            <h2 className="text-xl font-bold">{content}</h2>
+          </div>
         ))}
       </div>
     </div>

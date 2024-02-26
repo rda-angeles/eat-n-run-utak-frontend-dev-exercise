@@ -6,7 +6,7 @@ export interface HeaderTypes {
 
 export interface ModalTypes {
   handleCloseModal: () => void;
-  handleOpenModal: () => void;
+  handleOpenModal?: () => void;
   open: boolean;
 }
 

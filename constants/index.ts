@@ -16,5 +16,12 @@ export const salesSummaryContents = [
   },
 ];
 
-export const foodCategory = ["Desserts", "Rice meal", "Pasta", "Beverage"];
-export const foodSizes = ["Small", "Medium", "Large"];
+export const foodCategories = [
+  "",
+  "Dessert",
+  "Rice meal",
+  "Snack",
+  "Pasta",
+  "Beverage",
+];
+export const foodSizes = ["", "Small", "Medium", "Large"];

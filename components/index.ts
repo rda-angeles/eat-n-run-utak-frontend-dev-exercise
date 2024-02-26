@@ -1,12 +1,13 @@
 // MUI Imports
 import { styled } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import Button, { ButtonProps } from "@mui/material/Button";
 
 // Components
 import Header from "./Header";
 import AddItemBtn from "./AddItemBtn";
 import Products from "./Products";
-import ComboBox from "./ComboBox";
+import Modal from "./Modal";
 
 export const drawerWidth = 240;
 
@@ -58,4 +59,12 @@ export const Main = styled("main", {
   }),
 }));
 
-export { Header, AddItemBtn, Products, ComboBox };
+export const AddItemBtnComponent = styled(Button)<ButtonProps>(() => ({
+  backgroundColor: "#3D8361 !important",
+  float: "right",
+  "&:hover": {
+    backgroundColor: "#1C6758 !important",
+  },
+}));
+
+export { Header, AddItemBtn, Products, Modal };
