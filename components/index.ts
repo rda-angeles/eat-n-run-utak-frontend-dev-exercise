@@ -7,6 +7,7 @@ import Header from "./Header";
 import AddItemBtn from "./AddItemBtn";
 import Products from "./Products";
 import Modal from "./Modal";
+import TablePaginationActions from "./TablePagination";
 
 export const drawerWidth = 240;
 
@@ -18,4 +19,10 @@ export const AddItemBtnComponent = styled(Button)<ButtonProps>(() => ({
   },
 }));
 
-export { Header, AddItemBtn, Products, Modal };
+export {
+  Header,
+  AddItemBtn,
+  Products,
+  Modal,
+  TablePaginationActions,
+};

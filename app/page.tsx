@@ -43,12 +43,11 @@ export default function page() {
   };
 
   const drawer = (
-    <div>
-      <div className="flex items-center">
-        <FastfoodIcon sx={{ color: "#1C6758", fontSize: 30 }} />
+    <div className="bg-c-secondary text-white h-full  shadow-none">
+      <div className="flex items-center p-4">
+        <FastfoodIcon sx={{ color: "#fff", fontSize: 30 }} />
         <h1 className="text-xl pt-1 font-bold ml-1">Eat-n-Run</h1>
       </div>
-      <Toolbar />
       <Divider />
       <List>
         {["Sales"].map((text, index) => (
@@ -76,9 +75,9 @@ export default function page() {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          bgcolor: "#3D8361",
+          bgcolor: "#fff",
           color: "black",
-          // boxShadow: "none",
+          boxShadow: "none",
         }}
       >
         <Toolbar>
@@ -104,6 +103,7 @@ export default function page() {
         }}
         aria-label="mailbox folders"
       >
+        {/* Mobile */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -123,6 +123,7 @@ export default function page() {
           {drawer}
         </Drawer>
 
+        {/* Desktop */}
         <Drawer
           variant="permanent"
           sx={{
@@ -130,6 +131,7 @@ export default function page() {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
+              border: "none",
             },
           }}
           open

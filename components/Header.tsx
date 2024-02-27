@@ -8,10 +8,10 @@ import { AddItemBtn } from "@/components";
 const Header = ({ handleCloseModal, handleOpenModal, open }: ModalTypes) => {
   return (
     <div className="mb-6">
-      <div className="flex items-center justify-between flex-col md:flex-row">
-        <h1 className="font-bold text-4xl mb-6">Sales summary</h1>
+      <div className="flex items-center justify-between flex-row mb-[4rem]">
+        <h1 className="font-bold text-4xl">Sales summary</h1>
 
-        <div className="flex mb-10 justify-center">
+        <div className="flex justify-center">
           <AddItemBtn
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
@@ -19,7 +19,7 @@ const Header = ({ handleCloseModal, handleOpenModal, open }: ModalTypes) => {
           />
         </div>
       </div>
-      <div className="grid gap-6 md:grid-cols-3 lg:max-w-[30rem] lg:gap-0">
+      <div className="grid grid-cols-3 lg:max-w-[40rem]">
         {salesSummaryContents.map(({ id, header, content }: HeaderTypes) => (
           <div key={id}>
             <h5 className="text-gray-500 font-bold uppercase text-sm">
