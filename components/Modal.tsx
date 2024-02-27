@@ -9,13 +9,14 @@ import { db } from "@/config/firebase";
 
 // Material ui
 import Box from "@mui/material/Box";
-import { Modal as ModalComponent } from "@mui/material";
+import { Button, Modal as ModalComponent } from "@mui/material";
+import { HighlightOffOutlined } from "@mui/icons-material";
 
 // Types
 import { ModalTypes } from "@/types";
 
 // Constants
-import { foodCategories, foodSizes } from "@/constants";
+import { foodCategories, foodSizes, defaultSizes } from "@/constants";
 
 // Custom Material UI component
 
@@ -24,18 +25,24 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 550,
+  height: 500,
   bgcolor: "background.paper",
   borderRadius: "5px",
   boxShadow: 24,
   p: 4,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
 };
 
 const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
   const [item, setItem] = useState({
     name: "",
-    categ: "",
-    size: "",
+    category: {
+      categName: "",
+      size: "",
+    },
     price: "",
     cost: "",
     stock: "",
@@ -51,8 +58,10 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
     ) {
       await addDoc(collection(db, "items"), {
         name: item.name.trim(),
-        categ: item.categ.trim(),
-        size: item.size.trim(),
+        category: {
+          categName: item.category.categName.trim(),
+          size: item.category.size.trim(),
+        },
         price: item.price.trim(),
         cost: item.cost.trim(),
         stock: item.stock.trim(),
@@ -60,8 +69,10 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
 
       setItem({
         name: "",
-        categ: "",
-        size: "",
+        category: {
+          categName: "",
+          size: "",
+        },
         price: "",
         cost: "",
         stock: "",
@@ -78,8 +89,16 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
 
     await updateDoc(updateItemDoc, {
       name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
-      categ: item.categ === "" ? selectedItem.categ.trim() : item.categ.trim(),
-      size: item.size === "" ? selectedItem.size.trim() : item.size.trim(),
+      category: {
+        categName:
+          item.category.categName === ""
+            ? selectedItem.category.categName.trim()
+            : item.category.categName.trim(),
+        size:
+          item.category.size === ""
+            ? selectedItem.category.size.trim()
+            : item.category.size.trim(),
+      },
       price: item.price === "" ? selectedItem.price.trim() : item.price.trim(),
       cost: item.cost === "" ? selectedItem.cost.trim() : item.cost.trim(),
       stock: item.stock === "" ? selectedItem.stock.trim() : item.stock.trim(),
@@ -87,8 +106,10 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
 
     setItem({
       name: "",
-      categ: "",
-      size: "",
+      category: {
+        categName: "",
+        size: "",
+      },
       price: "",
       cost: "",
       stock: "",
@@ -101,10 +122,16 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
     setItem({ ...item, name: e.target.value });
   };
   const selectedCateg = (e: any) => {
-    setItem({ ...item, categ: e.target.value });
+    setItem({
+      ...item,
+      category: { categName: e.target.value, size: item.category.size },
+    });
   };
   const selectedSize = (e: any) => {
-    setItem({ ...item, size: e.target.value });
+    setItem({
+      ...item,
+      category: { categName: item.category.categName, size: e.target.value },
+    });
   };
 
   const itemPrice = (e: any) => {
@@ -123,12 +150,19 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
     <>
       <ModalComponent
         open={open}
-        onClose={handleCloseModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <h2 className="text-xl font-bold">Add new product</h2>
+          <div className="flex items-center justify-between mb-[3rem]">
+            <h1 className="text-3xl font-bold ">
+              {selectedItem === undefined ? "Add new product" : "Edit product"}
+            </h1>
+
+            <Button onClick={handleCloseModal}>
+              <HighlightOffOutlined sx={{ color: "#D04848", fontSize: "2rem" }} />
+            </Button>
+          </div>
 
           <form
             onSubmit={() =>
@@ -136,30 +170,22 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 ? addItem(event)
                 : updateItem(selectedItem.id, event)
             }
+            className="grid grid-cols-2 gap-5 form-input"
           >
-            {/* Item name */}
-            <div>
-              <p>Product name</p>
-              <input
-                type="text"
-                defaultValue={
-                  selectedItem === undefined ? item.name : selectedItem.name
-                }
-                onChange={itemName}
-                placeholder="Product name"
-                className="search-field"
-              />
-            </div>
-
             {/* Category */}
+
             <div>
               <p>Product Category</p>
+
               <select
                 defaultValue={
-                  selectedItem === undefined ? item.categ : selectedItem.categ
+                  selectedItem === undefined
+                    ? item.category.categName
+                    : selectedItem.category?.categName
                 }
                 onChange={selectedCateg}
                 id="food-category"
+                className="input-field"
               >
                 {foodCategories.map((foodCategory) => (
                   <option key={foodCategory} value={foodCategory}>
@@ -172,20 +198,59 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             {/* Size */}
             <div>
               <p>Product Size</p>
+
               <select
                 defaultValue={
-                  selectedItem === undefined ? item.size : selectedItem.size
+                  selectedItem === undefined
+                    ? item.category.size
+                    : selectedItem.category?.size
                 }
                 onChange={selectedSize}
                 id="food-category"
+                className="input-field"
               >
-                {foodSizes.map((foodSize) => (
-                  <option key={foodSize} value={foodSize}>
-                    {foodSize}
-                  </option>
-                ))}
+                {selectedItem === undefined
+                  ? item.category.categName === "Meal" ||
+                    item.category.categName === "Pasta"
+                    ? foodSizes.map((foodSize) => (
+                        <option key={foodSize} value={foodSize}>
+                          {foodSize}
+                        </option>
+                      ))
+                    : defaultSizes.map((defaultSize) => (
+                        <option key={defaultSize} value={defaultSize}>
+                          {defaultSize}
+                        </option>
+                      ))
+                  : selectedItem.category?.categName === "Meal" ||
+                    selectedItem.category?.categName === "Pasta"
+                  ? foodSizes.map((foodSize) => (
+                      <option key={foodSize} value={foodSize}>
+                        {foodSize}
+                      </option>
+                    ))
+                  : defaultSizes.map((defaultSize) => (
+                      <option key={defaultSize} value={defaultSize}>
+                        {defaultSize}
+                      </option>
+                    ))}
               </select>
             </div>
+
+            {/* Item name */}
+            <div>
+              <p>Product name</p>
+              <input
+                type="text"
+                defaultValue={
+                  selectedItem === undefined ? item.name : selectedItem.name
+                }
+                onChange={itemName}
+                placeholder="Product name"
+                className="input-field "
+              />
+            </div>
+
             {/* Items price /item */}
             <div>
               <p>Product price</p>
@@ -196,7 +261,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                   selectedItem === undefined ? item.price : selectedItem.price
                 }
                 placeholder="Product price"
-                className="search-field"
+                className="input-field"
               />
             </div>
 
@@ -210,7 +275,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 }
                 onChange={itemCost}
                 placeholder="Product cost"
-                className="search-field"
+                className="input-field"
               />
             </div>
 
@@ -224,13 +289,19 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 }
                 onChange={itemStock}
                 placeholder="Product stock"
-                className="search-field"
+                className="input-field"
               />
             </div>
 
-            <AddItemBtnComponent variant="contained" type="submit">
+            <AddItemBtnComponent
+              variant="contained"
+              type="submit"
+              className="col-span-2 mt-[2rem]"
+            >
               <div className="flex items-center">
-                <span className="ml-1 capitalize">Add</span>
+                <span className="ml-1 capitalize">
+                  {selectedItem === undefined ? "Add" : "Update"}
+                </span>
               </div>
             </AddItemBtnComponent>
           </form>

@@ -1,7 +1,7 @@
 export const salesSummaryContents = [
   {
     id: 1,
-    header: "Product",
+    header: "Total Product",
     content: 50,
   },
   {
@@ -19,9 +19,10 @@ export const salesSummaryContents = [
 export const foodCategories = [
   "",
   "Dessert",
-  "Rice meal",
+  "Meal",
   "Snack",
   "Pasta",
   "Beverage",
 ];
-export const foodSizes = ["", "Small", "Medium", "Large"];
+export const defaultSizes = ["", "Small", "Medium", "Large"];
+export const foodSizes = ["", "Regular", "Family"];

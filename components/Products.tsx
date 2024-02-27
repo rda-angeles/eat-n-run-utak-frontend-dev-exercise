@@ -1,14 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
+
+// Firebase imports
 import {
   collection,
   query,
   onSnapshot,
   deleteDoc,
   doc,
-  getDocs,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+
 // MUI components
 import {
   Table,
@@ -20,9 +22,12 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-
 import { Edit, Delete } from "@mui/icons-material";
+
+// Components import
 import { Modal } from "@/components";
+
+// Redux imports
 
 export default function Products() {
   const [items, setNewItems] = useState<any[]>([]);
@@ -44,15 +49,12 @@ export default function Products() {
       const fbQuery = query(collection(db, "items"));
       const unsubscribe = onSnapshot(fbQuery, (querySnapshot) => {
         let itemsArr: any = [];
-
         querySnapshot.forEach((doc) => {
           itemsArr.push({ ...doc.data(), id: doc.id });
         });
-
         setNewItems(itemsArr);
       });
     };
-
     getProducts();
   }, []);
 
@@ -97,9 +99,9 @@ export default function Products() {
                   <TableCell component="th" scope="row">
                     {item.name}
                   </TableCell>
-                  <TableCell align="right">{item.categ}</TableCell>
+                  <TableCell align="right">{item.category.categName}</TableCell>
                   <TableCell align="right">
-                    {item.size == "" ? "N/a" : item.size}
+                    {item.category.size == "" ? "N/a" : item.category.size}
                   </TableCell>
                   <TableCell align="right">{item.price}php</TableCell>
                   <TableCell align="right">{item.cost}php</TableCell>
@@ -110,7 +112,7 @@ export default function Products() {
                     </Button>
 
                     <Button onClick={() => deleteItem(item.id)}>
-                      <Delete color="error" />
+                      <Delete sx={{ color: "#D04848" }} />
                     </Button>
                   </TableCell>
                 </TableRow>

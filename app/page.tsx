@@ -1,114 +1,153 @@
 "use client";
-
 import { useState } from "react";
-import { useTheme, createTheme } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
-import InventoryIcon from "@mui/icons-material/Inventory";
+import { drawerWidth, Products, Header } from "@/components";
 
-import {
-  DrawerHeader,
-  AppBar,
-  Main,
-  drawerWidth,
-  Products,
-  Header,
-} from "@/components";
-
-export default function Home() {
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+export default function page() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
 
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
+
+  const handleDrawerTransitionEnd = () => {
+    setIsClosing(false);
+  };
+
+  const handleDrawerToggle = () => {
+    if (!isClosing) {
+      setMobileOpen(!mobileOpen);
+    }
+  };
+
+  const drawer = (
+    <div>
+      <div className="flex items-center">
+        <FastfoodIcon sx={{ color: "#1C6758", fontSize: 30 }} />
+        <h1 className="text-xl pt-1 font-bold ml-1">Eat-n-Run</h1>
+      </div>
+      <Toolbar />
+      <Divider />
+      <List>
+        {["Sales"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+    </div>
+  );
+
   return (
     <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+
+      {/* Main Nav */}
       <AppBar
         position="fixed"
-        open={open}
-        sx={{ bgcolor: "white", color: "black", boxShadow: "none" }}
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          bgcolor: "#3D8361",
+          color: "black",
+          // boxShadow: "none",
+        }}
       >
         <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
+          <Typography variant="h6" noWrap component="div"></Typography>
         </Toolbar>
       </AppBar>
 
-      <Drawer
+      {/* Side Nav */}
+      <Box
+        component="nav"
         sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
+          width: { sm: drawerWidth },
+          flexShrink: { sm: 0 },
         }}
-        variant="persistent"
-        anchor="left"
-        open={open}
+        aria-label="mailbox folders"
       >
-        <DrawerHeader>
-          <div className="flex items-center">
-            <FastfoodIcon sx={{ color: "#1C6758", fontSize: 30 }} />
-            <h1 className="text-xl pt-1 font-bold ml-1">Eat-n-Run</h1>
-          </div>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onTransitionEnd={handleDrawerTransitionEnd}
+          onClose={handleDrawerClose}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
 
-        <Divider />
-        <List>
-          {["Sales"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <InventoryIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
 
-      <Main open={open}>
-        <DrawerHeader />
-
+      {/* Main content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          marginTop: "2rem",
+        }}
+      >
         {/* Content/Components here */}
         <div className="main-content-wrapper">
           <Header
@@ -118,7 +157,7 @@ export default function Home() {
           />
           <Products />
         </div>
-      </Main>
+      </Box>
     </Box>
   );
 }

@@ -12,11 +12,6 @@ const Header = ({ handleCloseModal, handleOpenModal, open }: ModalTypes) => {
         <h1 className="font-bold text-4xl mb-6">Sales summary</h1>
 
         <div className="flex mb-10 justify-center">
-          <input
-            type="text"
-            placeholder="Search item"
-            className="search-field"
-          />
           <AddItemBtn
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
