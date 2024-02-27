@@ -41,19 +41,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
     stock: "",
   });
 
-  const [updateItem, setUpdateItem] = useState({
-    name: "",
-    categ: "",
-    size: "",
-    price: "",
-    cost: "",
-    stock: "",
-  });
-
   const addItem = async (e: any) => {
     e.preventDefault();
-    // add item to firbase here
-
     if (
       item.name !== "" &&
       item.price !== "" &&
@@ -77,31 +66,39 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
         cost: "",
         stock: "",
       });
-
-      handleCloseModal();
     }
+
+    handleCloseModal();
   };
 
-  const updatedItem = async (id: string, event: any) => {
-    event.preventDefault();
+  const updateItem = async (id: string, e: any) => {
+    e.preventDefault();
+
     const updateItemDoc = doc(db, "items", id);
 
     await updateDoc(updateItemDoc, {
-      name: selectedItem.name,
-      categ: selectedItem.categ,
-      size: selectedItem.size,
-      price: selectedItem.price,
-      cost: selectedItem.cost,
-      stock: selectedItem.stock,
+      name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
+      categ: item.categ === "" ? selectedItem.categ.trim() : item.categ.trim(),
+      size: item.size === "" ? selectedItem.size.trim() : item.size.trim(),
+      price: item.price === "" ? selectedItem.price.trim() : item.price.trim(),
+      cost: item.cost === "" ? selectedItem.cost.trim() : item.cost.trim(),
+      stock: item.stock === "" ? selectedItem.stock.trim() : item.stock.trim(),
     });
+
+    setItem({
+      name: "",
+      categ: "",
+      size: "",
+      price: "",
+      cost: "",
+      stock: "",
+    });
+
+    handleCloseModal();
   };
 
   const itemName = (e: any) => {
-    if (selectedItem === undefined) {
-      setUpdateItem({ ...updateItem, name: e.target.value });
-    } else {
-      setItem({ ...item, name: e.target.value });
-    }
+    setItem({ ...item, name: e.target.value });
   };
   const selectedCateg = (e: any) => {
     setItem({ ...item, categ: e.target.value });
@@ -136,8 +133,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
           <form
             onSubmit={() =>
               selectedItem === undefined
-                ? addItem
-                : updatedItem(selectedItem.id, event)
+                ? addItem(event)
+                : updateItem(selectedItem.id, event)
             }
           >
             {/* Item name */}
@@ -145,7 +142,9 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               <p>Product name</p>
               <input
                 type="text"
-                value={selectedItem === undefined ? item.name : updateItem.name}
+                defaultValue={
+                  selectedItem === undefined ? item.name : selectedItem.name
+                }
                 onChange={itemName}
                 placeholder="Product name"
                 className="search-field"
@@ -156,7 +155,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             <div>
               <p>Product Category</p>
               <select
-                value={
+                defaultValue={
                   selectedItem === undefined ? item.categ : selectedItem.categ
                 }
                 onChange={selectedCateg}
@@ -174,7 +173,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             <div>
               <p>Product Size</p>
               <select
-                value={
+                defaultValue={
                   selectedItem === undefined ? item.size : selectedItem.size
                 }
                 onChange={selectedSize}
@@ -193,7 +192,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               <input
                 type="text"
                 onChange={itemPrice}
-                value={
+                defaultValue={
                   selectedItem === undefined ? item.price : selectedItem.price
                 }
                 placeholder="Product price"
@@ -206,7 +205,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               <p>Product cost</p>
               <input
                 type="text"
-                value={
+                defaultValue={
                   selectedItem === undefined ? item.cost : selectedItem.cost
                 }
                 onChange={itemCost}
@@ -220,7 +219,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               <p>Amount in stock</p>
               <input
                 type="text"
-                value={
+                defaultValue={
                   selectedItem === undefined ? item.stock : selectedItem.stock
                 }
                 onChange={itemStock}
