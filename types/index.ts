@@ -1,7 +1,9 @@
 export interface HeaderTypes {
   id: any;
   header: string;
-  content: string | number;
+  content?: string | number;
+  bgColor: string;
+  productCount?: number;
 }
 
 export interface ModalTypes {

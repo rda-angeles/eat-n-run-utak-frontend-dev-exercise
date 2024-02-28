@@ -18,10 +18,7 @@ import {
 import { Edit, Delete } from "@mui/icons-material";
 
 //Component import
-import {
-  TablePaginationActions,
-  Modal,
-} from "@/components";
+import { TablePaginationActions, Modal } from "@/components";
 
 // Firebase imports
 import {
@@ -32,11 +29,19 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { AddItemBtn } from "@/components";
+import { ModalTypes } from "@/types";
 
-export default function Products() {
+export default function Products({
+  handleCloseModal,
+  handleOpenModal,
+  open,
+}: ModalTypes) {
+  // Table Row Variables
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  // Items and modal variables
   const [items, setNewItems] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState({});
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -47,10 +52,6 @@ export default function Products() {
   };
   const handleCloseUpdateModal = () => setOpenUpdateModal(false);
 
-  const deleteItem = async (id: string) => {
-    await deleteDoc(doc(db, "items", id));
-  };
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
 
@@ -68,6 +69,11 @@ export default function Products() {
     setPage(0);
   };
 
+  // Delete item
+  const deleteItem = async (id: string) => {
+    await deleteDoc(doc(db, "items", id));
+  };
+
   useEffect(() => {
     const getProducts = async () => {
       const fbQuery = query(collection(db, "items"));
@@ -83,99 +89,111 @@ export default function Products() {
   }, []);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ fontWeight: "bold" }}>Item name</TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Category
-            </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Size
-            </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Price
-            </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Cost
-            </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Stock
-            </TableCell>
-            <TableCell align="right" sx={{ fontWeight: "bold" }}>
-              Actions
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(rowsPerPage > 0
-            ? items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : items
-          ).map((item) => (
-            <TableRow key={item.name}>
-              <TableCell component="th" scope="row">
-                {item.name}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {item.category.categName}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {item.category.size}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {item.price}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {item.cost}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {item.cost}
-              </TableCell>
-              <TableCell align="right">
-                <Button onClick={() => handleOpenUpdateModal(item)}>
-                  <Edit color="action" />
-                </Button>
+    <>
+      <h1 className="text-4xl font-bold">Inventory.</h1>
 
-                <Button onClick={() => deleteItem(item.id)}>
-                  <Delete sx={{ color: "#D04848" }} />
-                </Button>
+      <AddItemBtn
+        handleCloseModal={handleCloseModal}
+        handleOpenModal={handleOpenModal}
+        open={open}
+      />
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: "bold" }}>Item name</TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Category
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Size
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Price
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Cost
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Stock
+              </TableCell>
+              <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                Actions
               </TableCell>
             </TableRow>
-          ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? items.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
+              : items
+            ).map((item) => (
+              <TableRow key={item.name}>
+                <TableCell component="th" scope="row">
+                  {item.name}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  {item.category.categName}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  {item.category.size}
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  {item.price}php
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  {item.cost}php
+                </TableCell>
+                <TableCell style={{ width: 160 }} align="right">
+                  {item.stock}
+                </TableCell>
+                <TableCell align="right">
+                  <Button onClick={() => handleOpenUpdateModal(item)}>
+                    <Edit color="action" />
+                  </Button>
 
-          <Modal
-            open={openUpdateModal}
-            handleCloseModal={handleCloseUpdateModal}
-            selectedItem={selectedItem}
-          />
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-              colSpan={7}
-              count={items.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
+                  <Button onClick={() => deleteItem(item.id)}>
+                    <Delete sx={{ color: "#D04848" }} />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+
+            <Modal
+              open={openUpdateModal}
+              handleCloseModal={handleCloseUpdateModal}
+              selectedItem={selectedItem}
             />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                colSpan={7}
+                count={items.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: {
+                    "aria-label": "rows per page",
+                  },
+                  native: true,
+                }}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                ActionsComponent={TablePaginationActions}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
+    </>
   );
 }

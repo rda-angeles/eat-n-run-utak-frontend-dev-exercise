@@ -10,7 +10,7 @@ const AddItemBtn = ({
   open,
 }: ModalTypes) => {
   return (
-    <div className="">
+    <div>
       <AddItemBtnComponent variant="contained" onClick={handleOpenModal}>
         <div className="flex items-center">
           <AddIcon />

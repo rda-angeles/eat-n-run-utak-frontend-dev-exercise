@@ -3,21 +3,15 @@ import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import { drawerWidth, Products, Header } from "@/components";
+import PersonIcon from "@mui/icons-material/Person";
+import Avatar from "@mui/material/Avatar";
+
+// Components
+import { drawerWidth, Products, SalesSummary, DrawerItem } from "@/components";
 
 export default function page() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -42,33 +36,8 @@ export default function page() {
     }
   };
 
-  const drawer = (
-    <div className="bg-c-secondary text-white h-full  shadow-none">
-      <div className="flex items-center p-4">
-        <FastfoodIcon sx={{ color: "#fff", fontSize: 30 }} />
-        <h1 className="text-xl pt-1 font-bold ml-1">Eat-n-Run</h1>
-      </div>
-      <Divider />
-      <List>
-        {["Sales"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </div>
-  );
-
   return (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-
       {/* Main Nav */}
       <AppBar
         position="fixed"
@@ -77,7 +46,6 @@ export default function page() {
           ml: { sm: `${drawerWidth}px` },
           bgcolor: "#fff",
           color: "black",
-          boxShadow: "none",
         }}
       >
         <Toolbar>
@@ -90,7 +58,6 @@ export default function page() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div"></Typography>
         </Toolbar>
       </AppBar>
 
@@ -120,7 +87,7 @@ export default function page() {
             },
           }}
         >
-          {drawer}
+          <DrawerItem />
         </Drawer>
 
         {/* Desktop */}
@@ -136,7 +103,7 @@ export default function page() {
           }}
           open
         >
-          {drawer}
+          <DrawerItem />
         </Drawer>
       </Box>
 
@@ -148,16 +115,21 @@ export default function page() {
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           marginTop: "2rem",
+          display: "grid",
+          gap: "2rem"
         }}
       >
+        <div className="main-content-wrapper">
+          <SalesSummary />
+        </div>
+
         {/* Content/Components here */}
         <div className="main-content-wrapper">
-          <Header
+          <Products
             handleCloseModal={handleCloseModal}
             handleOpenModal={handleOpenModal}
             open={openModal}
           />
-          <Products />
         </div>
       </Box>
     </Box>

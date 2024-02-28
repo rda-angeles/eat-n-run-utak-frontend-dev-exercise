@@ -67,6 +67,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
         stock: item.stock.trim(),
       });
 
+      console.log("Added:", item.stock.trim());
+
       setItem({
         name: "",
         category: {
@@ -144,6 +146,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
 
   const itemStock = (e: any) => {
     setItem({ ...item, stock: e.target.value });
+    console.log(e.target.value);
   };
 
   return (
@@ -160,7 +163,9 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             </h1>
 
             <Button onClick={handleCloseModal}>
-              <HighlightOffOutlined sx={{ color: "#D04848", fontSize: "2rem" }} />
+              <HighlightOffOutlined
+                sx={{ color: "#D04848", fontSize: "2rem" }}
+              />
             </Button>
           </div>
 
