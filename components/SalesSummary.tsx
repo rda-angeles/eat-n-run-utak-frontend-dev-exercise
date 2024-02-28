@@ -27,7 +27,7 @@ const SalesSummary = () => {
     <div className="mb-6">
       <h1 className="font-bold text-4xl mb-[2rem]">Sales summary.</h1>
 
-      <div className="grid grid-cols-3 gap-8 lg:max-w-[60rem]">
+      <div className="grid grid-cols-3 gap-8 justify-center">
         {salesSummaryContents.map(
           ({ id, header, content, bgColor }: HeaderTypes) => (
             <SummaryCard

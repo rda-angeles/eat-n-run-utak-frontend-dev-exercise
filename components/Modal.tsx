@@ -1,11 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AddItemBtnComponent } from "./";
-
-// Firebase
-import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
-import { db } from "@/config/firebase";
 
 // Material ui
 import Box from "@mui/material/Box";
@@ -15,8 +11,16 @@ import { HighlightOffOutlined } from "@mui/icons-material";
 // Types
 import { ModalTypes } from "@/types";
 
+// Utils
+import { updateItem, addItem } from "@/utils";
+
 // Constants
-import { foodCategories, foodSizes, defaultSizes } from "@/constants";
+import {
+  foodCategories,
+  foodSizes,
+  defaultSizes,
+  measurements,
+} from "@/constants";
 
 // Custom Material UI component
 
@@ -45,80 +49,11 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
     },
     price: "",
     cost: "",
-    stock: "",
+    stock: {
+      count: "",
+      measurement: "",
+    },
   });
-
-  const addItem = async (e: any) => {
-    e.preventDefault();
-    if (
-      item.name !== "" &&
-      item.price !== "" &&
-      item.cost !== "" &&
-      item.stock !== ""
-    ) {
-      await addDoc(collection(db, "items"), {
-        name: item.name.trim(),
-        category: {
-          categName: item.category.categName.trim(),
-          size: item.category.size.trim(),
-        },
-        price: item.price.trim(),
-        cost: item.cost.trim(),
-        stock: item.stock.trim(),
-      });
-
-      console.log("Added:", item.stock.trim());
-
-      setItem({
-        name: "",
-        category: {
-          categName: "",
-          size: "",
-        },
-        price: "",
-        cost: "",
-        stock: "",
-      });
-    }
-
-    handleCloseModal();
-  };
-
-  const updateItem = async (id: string, e: any) => {
-    e.preventDefault();
-
-    const updateItemDoc = doc(db, "items", id);
-
-    await updateDoc(updateItemDoc, {
-      name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
-      category: {
-        categName:
-          item.category.categName === ""
-            ? selectedItem.category.categName.trim()
-            : item.category.categName.trim(),
-        size:
-          item.category.size === ""
-            ? selectedItem.category.size.trim()
-            : item.category.size.trim(),
-      },
-      price: item.price === "" ? selectedItem.price.trim() : item.price.trim(),
-      cost: item.cost === "" ? selectedItem.cost.trim() : item.cost.trim(),
-      stock: item.stock === "" ? selectedItem.stock.trim() : item.stock.trim(),
-    });
-
-    setItem({
-      name: "",
-      category: {
-        categName: "",
-        size: "",
-      },
-      price: "",
-      cost: "",
-      stock: "",
-    });
-
-    handleCloseModal();
-  };
 
   const itemName = (e: any) => {
     setItem({ ...item, name: e.target.value });
@@ -145,8 +80,23 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
   };
 
   const itemStock = (e: any) => {
-    setItem({ ...item, stock: e.target.value });
-    console.log(e.target.value);
+    setItem({
+      ...item,
+      stock: {
+        count: e.target.value,
+        measurement: item.stock.measurement,
+      },
+    });
+  };
+
+  const selectedMeasurement = (e: any) => {
+    setItem({
+      ...item,
+      stock: {
+        count: item.stock.count,
+        measurement: e.target.value,
+      },
+    });
   };
 
   return (
@@ -172,8 +122,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
           <form
             onSubmit={() =>
               selectedItem === undefined
-                ? addItem(event)
-                : updateItem(selectedItem.id, event)
+                ? addItem(item, handleCloseModal, event)
+                : updateItem(selectedItem, item, handleCloseModal, event)
             }
             className="grid grid-cols-2 gap-5 form-input"
           >
@@ -287,15 +237,33 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             {/* Amount in stock */}
             <div>
               <p>Amount in stock</p>
-              <input
-                type="text"
-                defaultValue={
-                  selectedItem === undefined ? item.stock : selectedItem.stock
-                }
-                onChange={itemStock}
-                placeholder="Product stock"
-                className="input-field"
-              />
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  defaultValue={
+                    selectedItem === undefined ? item.stock.count : selectedItem.stock?.count
+                  }
+                  onChange={itemStock}
+                  placeholder="Enter stock"
+                  className="input-field "
+                />
+                <select
+                  defaultValue={
+                    selectedItem === undefined
+                      ? item.stock.measurement
+                      : selectedItem.stock?.measurement
+                  }
+                  onChange={selectedMeasurement}
+                  id="food-category"
+                  className="input-field"
+                >
+                  {measurements.map((measurement) => (
+                    <option key={measurement} value={measurement}>
+                      {measurement}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <AddItemBtnComponent

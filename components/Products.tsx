@@ -18,7 +18,13 @@ import {
 import { Edit, Delete } from "@mui/icons-material";
 
 //Component import
-import { TablePaginationActions, Modal } from "@/components";
+import { TablePaginationActions, Modal, AddItemBtn } from "@/components";
+
+// Type import
+import { ModalTypes } from "@/types";
+
+// Utils
+import { deleteItem } from "@/utils";
 
 // Firebase imports
 import {
@@ -29,8 +35,6 @@ import {
   doc,
 } from "firebase/firestore";
 import { db } from "@/config/firebase";
-import { AddItemBtn } from "@/components";
-import { ModalTypes } from "@/types";
 
 export default function Products({
   handleCloseModal,
@@ -67,11 +71,6 @@ export default function Products({
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  // Delete item
-  const deleteItem = async (id: string) => {
-    await deleteDoc(doc(db, "items", id));
   };
 
   useEffect(() => {
@@ -147,7 +146,7 @@ export default function Products({
                   {item.cost}php
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="right">
-                  {item.stock}
+                  {item.stock.count} {item.stock.measurement}
                 </TableCell>
                 <TableCell align="right">
                   <Button onClick={() => handleOpenUpdateModal(item)}>

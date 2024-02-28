@@ -37,3 +37,4 @@ export const foodCategories = [
 ];
 export const defaultSizes = ["", "Small", "Medium", "Large"];
 export const foodSizes = ["", "Regular", "Family"];
+export const measurements = ["", "gram/s", "liter/s", "piece/s", "serving/s"];

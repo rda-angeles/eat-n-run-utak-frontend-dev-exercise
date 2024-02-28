@@ -14,11 +14,11 @@ import SummaryCard from "./SummaryCard";
 export const drawerWidth = 240;
 
 export const AddItemBtnComponent = styled(Button)<ButtonProps>(() => ({
-  backgroundColor: "#3D8361 !important",
+  backgroundColor: "#289672 !important",
   float: "right",
   marginBottom: "2rem",
   "&:hover": {
-    backgroundColor: "#1C6758 !important",
+    backgroundColor: "#1E6F5C !important",
   },
 }));
 
