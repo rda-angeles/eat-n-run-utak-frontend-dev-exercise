@@ -4,6 +4,7 @@ export interface HeaderTypes {
   content?: string | number;
   bgColor: string;
   productCount?: number;
+  salesCount?: number;
 }
 
 export interface ModalTypes {

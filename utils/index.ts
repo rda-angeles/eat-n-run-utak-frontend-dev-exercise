@@ -156,3 +156,29 @@ export const updateItem = async (
     },
   };
 };
+
+export const addOrder = async (
+  item: {
+    id: string;
+    price: number;
+    stock: {
+      count: number;
+      measurement: string;
+    };
+  },
+  orderInput: string,
+  handleCloseModal: () => void
+) => {
+  const updateItemDoc = doc(db, "items", item.id);
+
+  await updateDoc(updateItemDoc, {
+    stock: {
+      count: item.stock.count - parseFloat(orderInput),
+      measurement: item.stock.measurement,
+    },
+  });
+
+  handleCloseModal();
+
+  return (orderInput = "");
+};

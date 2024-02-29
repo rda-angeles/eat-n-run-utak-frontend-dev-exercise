@@ -7,6 +7,7 @@ const SummaryCard = ({
   content,
   bgColor,
   productCount,
+  salesCount,
 }: HeaderTypes) => {
   return (
     <div
@@ -29,7 +30,7 @@ const SummaryCard = ({
       <div className="text-center p-3 xl:text-left ">
         <span>{header}</span>
         <h2 className="font-bold text-2xl">
-          {id === 1 ? productCount : content}
+          {id === 1 ? productCount : id === 2 ? salesCount + " php" : content}
         </h2>
       </div>
     </div>

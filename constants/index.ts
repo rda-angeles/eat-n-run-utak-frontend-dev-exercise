@@ -2,38 +2,43 @@ export const tableHeads = [
   {
     id: 1,
     tableName: "Item name",
-    alignRight: false,
+    defaultAlignment: false,
   },
   {
     id: 2,
     tableName: "Category",
-    alignRight: true,
+    defaultAlignment: true,
   },
   {
     id: 3,
     tableName: "Size",
-    alignRight: true,
+    defaultAlignment: true,
   },
   {
     id: 4,
     tableName: "Price",
-    alignRight: true,
+    defaultAlignment: true,
   },
 
   {
     id: 5,
     tableName: "Cost",
-    alignRight: true,
+    defaultAlignment: true,
   },
   {
     id: 6,
-    tableName: "Servings",
-    alignRight: true,
+    tableName: "Order",
+    defaultAlignment: true,
   },
   {
     id: 7,
+    tableName: "Stock",
+    defaultAlignment: true,
+  },
+  {
+    id: 8,
     tableName: "Actions",
-    alignRight: true,
+    defaultAlignment: true,
   },
 ];
 export const salesSummaryContents = [
@@ -45,7 +50,6 @@ export const salesSummaryContents = [
   {
     id: 2,
     header: "Sales",
-    content: "10,000php",
     bgColor: "#EE4266",
   },
   {

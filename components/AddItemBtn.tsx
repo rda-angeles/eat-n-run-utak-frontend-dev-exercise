@@ -1,8 +1,7 @@
-import AddIcon from "@mui/icons-material/Add";
-
 // Types
 import { ModalTypes } from "@/types";
-import { Modal, AddItemBtnComponent } from "./";
+import { Modal, BtnComponent } from "./";
+import { AddCircle } from "@mui/icons-material";
 
 const AddItemBtn = ({
   handleCloseModal,
@@ -11,12 +10,12 @@ const AddItemBtn = ({
 }: ModalTypes) => {
   return (
     <div>
-      <AddItemBtnComponent variant="contained" onClick={handleOpenModal}>
+      <BtnComponent variant="contained" onClick={handleOpenModal}>
         <div className="flex items-center">
-          <AddIcon />
+          <AddCircle sx={{ marginRight: ".5rem" }} />
           <span className="ml-1 capitalize">Add item</span>
         </div>
-      </AddItemBtnComponent>
+      </BtnComponent>
 
       <Modal handleCloseModal={handleCloseModal} open={open} />
     </div>

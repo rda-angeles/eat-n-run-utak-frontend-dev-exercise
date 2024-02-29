@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 
 import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
-
 const SalesSummary = () => {
   const [productCount, setProductCount] = useState(0);
+  const [salesCount, setSalesCount] = useState(0);
 
   useEffect(() => {
     const getProductCount = async () => {
@@ -23,6 +23,7 @@ const SalesSummary = () => {
     };
     getProductCount();
   }, []);
+
   return (
     <div className="mb-6">
       <h1 className="font-bold text-4xl mb-[2rem]">Sales summary.</h1>
@@ -37,6 +38,7 @@ const SalesSummary = () => {
               content={content}
               bgColor={bgColor}
               productCount={productCount}
+              salesCount={salesCount}
             />
           )
         )}

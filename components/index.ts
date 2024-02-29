@@ -10,13 +10,22 @@ import Products from "./Products";
 import Modal from "./Modal";
 import TablePaginationActions from "./TablePagination";
 import SummaryCard from "./SummaryCard";
+import OrderModal from "./OrderModal";
 
 export const drawerWidth = 240;
 
-export const AddItemBtnComponent = styled(Button)<ButtonProps>(() => ({
+export const BtnComponent = styled(Button)<ButtonProps>(() => ({
   backgroundColor: "#289672 !important",
   float: "right",
   marginBottom: "2rem",
+  "&:hover": {
+    backgroundColor: "#1E6F5C !important",
+  },
+}));
+
+export const OrderBtnComponent = styled(Button)<ButtonProps>(() => ({
+  backgroundColor: "#289672 !important",
+  padding: ".5rem",
   "&:hover": {
     backgroundColor: "#1E6F5C !important",
   },
@@ -30,4 +39,5 @@ export {
   Modal,
   TablePaginationActions,
   SummaryCard,
+  OrderModal,
 };

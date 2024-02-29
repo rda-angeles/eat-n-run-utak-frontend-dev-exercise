@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AddItemBtnComponent } from "./";
+import { BtnComponent } from "./";
 
 // Material ui
 import Box from "@mui/material/Box";
@@ -277,7 +277,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               </div>
             </div>
 
-            <AddItemBtnComponent
+            <BtnComponent
               variant="contained"
               type="submit"
               className="col-span-2 mt-[2rem]"
@@ -287,7 +287,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                   {selectedItem === undefined ? "Add" : "Update"}
                 </span>
               </div>
-            </AddItemBtnComponent>
+            </BtnComponent>
           </form>
         </Box>
       </ModalComponent>

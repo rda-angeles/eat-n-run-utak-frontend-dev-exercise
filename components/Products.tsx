@@ -13,18 +13,26 @@ import {
   TableRow,
   Paper,
   IconButton,
+  Button,
 } from "@mui/material";
 
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, AddCircle } from "@mui/icons-material";
 
 //Component import
-import { TablePaginationActions, Modal, AddItemBtn } from "@/components";
+import {
+  TablePaginationActions,
+  Modal,
+  AddItemBtn,
+  OrderModal,
+  BtnComponent,
+  OrderBtnComponent,
+} from "@/components";
 
 // Type import
 import { ModalTypes } from "@/types";
 
 // Utils
-import { deleteItem } from "@/utils";
+import { addOrder, deleteItem } from "@/utils";
 
 // Firebase imports
 import { collection, query, onSnapshot } from "firebase/firestore";
@@ -44,12 +52,20 @@ export default function Products({
   const [items, setNewItems] = useState<any[]>([]);
   const [selectedItem, setSelectedItem] = useState({});
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [openOrderModal, setOpenOrderModal] = useState(false);
 
   const handleOpenUpdateModal = (item: {}) => {
     setOpenUpdateModal(true);
     setSelectedItem(item);
   };
   const handleCloseUpdateModal = () => setOpenUpdateModal(false);
+
+  // Order Modal
+  const handleOpenOrderModal = (item: {}) => {
+    setOpenOrderModal(true);
+    setSelectedItem(item);
+  };
+  const handleCloseOrderModal = () => setOpenOrderModal(false);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - items.length) : 0;
@@ -98,7 +114,7 @@ export default function Products({
             <TableRow>
               {tableHeads.map((tableHeadItem) => (
                 <TableCell
-                  align={tableHeadItem.alignRight ? "right" : "left"}
+                  align={tableHeadItem.defaultAlignment ? "center" : "left"}
                   key={tableHeadItem.id}
                   sx={{ fontWeight: "bold" }}
                 >
@@ -119,24 +135,37 @@ export default function Products({
                 <TableCell component="th" scope="row">
                   {item.name}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} align="center">
                   {item.category.categName}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} align="center">
                   {item.category.size}
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} align="center">
                   {item.price}php
                 </TableCell>
-
-                <TableCell style={{ width: 160 }} align="right">
+                <TableCell style={{ width: 160 }} align="center">
                   {item.cost}php
                 </TableCell>
-                <TableCell style={{ width: 160 }} align="right">
+
+                <TableCell style={{ width: 200 }} align="center">
+                  <OrderBtnComponent
+                    onClick={() => {
+                      handleOpenOrderModal(item);
+                    }}
+                  >
+                    <AddCircle sx={{ color: "#fff", marginRight: ".5rem" }} />
+                    <span className="text-white text-sm capitalize">
+                      Add order
+                    </span>
+                  </OrderBtnComponent>
+                </TableCell>
+
+                <TableCell style={{ width: 160 }} align="center">
                   {item.stock.count} {item.stock.measurement}
                 </TableCell>
                 <TableCell
-                  align="right"
+                  align="center"
                   sx={{
                     display: "flex",
                     flexDirection: "revert",
@@ -159,6 +188,11 @@ export default function Products({
               </TableRow>
             )}
 
+            <OrderModal
+              open={openOrderModal}
+              handleCloseModal={handleCloseOrderModal}
+              selectedItem={selectedItem}
+            />
             <Modal
               open={openUpdateModal}
               handleCloseModal={handleCloseUpdateModal}
@@ -169,7 +203,7 @@ export default function Products({
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                colSpan={7}
+                colSpan={8}
                 count={items.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
