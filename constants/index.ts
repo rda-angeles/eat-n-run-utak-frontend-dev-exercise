@@ -1,16 +1,45 @@
-import { getCountFromServer, collection } from "firebase/firestore";
-import { db } from "@/config/firebase";
+export const tableHeads = [
+  {
+    id: 1,
+    tableName: "Item name",
+    alignRight: false,
+  },
+  {
+    id: 2,
+    tableName: "Category",
+    alignRight: true,
+  },
+  {
+    id: 3,
+    tableName: "Size",
+    alignRight: true,
+  },
+  {
+    id: 4,
+    tableName: "Price",
+    alignRight: true,
+  },
 
-const getProductCount = async () => {
-  const coll = collection(db, "items");
-  const snapshot = await getCountFromServer(coll);
-  return snapshot.data().count;
-};
-
+  {
+    id: 5,
+    tableName: "Cost",
+    alignRight: true,
+  },
+  {
+    id: 6,
+    tableName: "Servings",
+    alignRight: true,
+  },
+  {
+    id: 7,
+    tableName: "Actions",
+    alignRight: true,
+  },
+];
 export const salesSummaryContents = [
   {
     id: 1,
-    header: "Total Product",
+    header: "Total Product/s",
     bgColor: "#1B6B93",
   },
   {

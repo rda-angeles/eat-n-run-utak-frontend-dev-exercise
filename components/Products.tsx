@@ -12,7 +12,7 @@ import {
   TablePagination,
   TableRow,
   Paper,
-  Button,
+  IconButton,
 } from "@mui/material";
 
 import { Edit, Delete } from "@mui/icons-material";
@@ -27,14 +27,9 @@ import { ModalTypes } from "@/types";
 import { deleteItem } from "@/utils";
 
 // Firebase imports
-import {
-  collection,
-  query,
-  onSnapshot,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
+import { tableHeads } from "@/constants";
 
 export default function Products({
   handleCloseModal,
@@ -81,6 +76,7 @@ export default function Products({
         querySnapshot.forEach((doc) => {
           itemsArr.push({ ...doc.data(), id: doc.id });
         });
+
         setNewItems(itemsArr);
       });
     };
@@ -100,25 +96,15 @@ export default function Products({
         <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: "bold" }}>Item name</TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Category
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Size
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Price
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Cost
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Stock
-              </TableCell>
-              <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                Actions
-              </TableCell>
+              {tableHeads.map((tableHeadItem) => (
+                <TableCell
+                  align={tableHeadItem.alignRight ? "right" : "left"}
+                  key={tableHeadItem.id}
+                  sx={{ fontWeight: "bold" }}
+                >
+                  {tableHeadItem.tableName}
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -142,20 +128,28 @@ export default function Products({
                 <TableCell style={{ width: 160 }} align="right">
                   {item.price}php
                 </TableCell>
+
                 <TableCell style={{ width: 160 }} align="right">
                   {item.cost}php
                 </TableCell>
                 <TableCell style={{ width: 160 }} align="right">
                   {item.stock.count} {item.stock.measurement}
                 </TableCell>
-                <TableCell align="right">
-                  <Button onClick={() => handleOpenUpdateModal(item)}>
+                <TableCell
+                  align="right"
+                  sx={{
+                    display: "flex",
+                    flexDirection: "revert",
+                    justifyContent: "end",
+                  }}
+                >
+                  <IconButton onClick={() => handleOpenUpdateModal(item)}>
                     <Edit color="action" />
-                  </Button>
+                  </IconButton>
 
-                  <Button onClick={() => deleteItem(item.id)}>
+                  <IconButton onClick={() => deleteItem(item.id)}>
                     <Delete sx={{ color: "#D04848" }} />
-                  </Button>
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

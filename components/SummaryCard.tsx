@@ -26,8 +26,8 @@ const SummaryCard = ({
         )}
       </div>
 
-      <div className="text-center p-3 lg:text-left ">
-        <span className="">{header}</span>
+      <div className="text-center p-3 xl:text-left ">
+        <span>{header}</span>
         <h2 className="font-bold text-2xl">
           {id === 1 ? productCount : content}
         </h2>

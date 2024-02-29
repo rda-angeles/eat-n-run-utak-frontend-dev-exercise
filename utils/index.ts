@@ -5,8 +5,12 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  query,
+  onSnapshot,
+  getDoc,
 } from "firebase/firestore";
 
+import "firebase/firestore";
 import { db } from "@/config/firebase";
 
 export const deleteItem = async (id: string) => {
@@ -31,6 +35,7 @@ export const addItem = async (
   event: any
 ) => {
   event.preventDefault();
+
   if (
     item.name !== "" &&
     item.price !== "" &&
@@ -44,16 +49,16 @@ export const addItem = async (
         categName: item.category.categName.trim(),
         size: item.category.size.trim(),
       },
-      price: item.price.trim(),
-      cost: item.cost.trim(),
+      price: parseFloat(item.price.trim()),
+      cost: parseFloat(item.cost.trim()),
       stock: {
-        count: item.stock.count.trim(),
+        count: parseFloat(item.stock.count.trim()),
         measurement: item.stock.measurement.trim(),
       },
     });
-  }
 
-  handleCloseModal();
+    handleCloseModal();
+  }
 
   return {
     name: (item.name = ""),
@@ -117,13 +122,17 @@ export const updateItem = async (
           ? selectedItem.category.size.trim()
           : item.category.size.trim(),
     },
-    price: item.price === "" ? selectedItem.price.trim() : item.price.trim(),
-    cost: item.cost === "" ? selectedItem.cost.trim() : item.cost.trim(),
+    price:
+      item.price === ""
+        ? parseFloat(selectedItem.price)
+        : parseFloat(item.price),
+    cost:
+      item.cost === "" ? parseFloat(selectedItem.cost) : parseFloat(item.cost),
     stock: {
       count:
         item.stock.count === ""
-          ? selectedItem.stock.count.trim()
-          : item.stock.count.trim(),
+          ? parseFloat(selectedItem.stock.count)
+          : parseFloat(item.stock.count),
       measurement:
         item.stock.measurement === ""
           ? selectedItem.stock.measurement.trim()

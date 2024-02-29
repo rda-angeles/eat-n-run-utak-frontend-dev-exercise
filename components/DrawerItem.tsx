@@ -1,12 +1,9 @@
 import Divider from "@mui/material/Divider";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MailIcon from "@mui/icons-material/Mail";
-
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 
 const DrawerItem = () => {
@@ -19,19 +16,20 @@ const DrawerItem = () => {
         <h1 className="text-3xl pt-1 font-bold ml-1">Eat-n-Run</h1>
       </div>
       <Divider />
-      <List>
-        {["Sales"].map((text, index) => (
+
+      <Divider />
+      <List sx={{ marginTop: "2rem" }}>
+        {["Dashbooard"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <DashboardIcon sx={{ color: "#fff" }} />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <h1 className="font-bold text-md">{text}</h1>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      <Divider />
     </div>
   );
 };

@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import PersonIcon from "@mui/icons-material/Person";
-import Avatar from "@mui/material/Avatar";
+
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Avatar,
+} from "@mui/material";
+
+import { Menu } from "@mui/icons-material";
 
 // Components
 import { drawerWidth, Products, SalesSummary, DrawerItem } from "@/components";
@@ -48,7 +50,7 @@ export default function page() {
           color: "black",
         }}
       >
-        <Toolbar>
+        <Toolbar className="app-toolbar">
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -56,8 +58,17 @@ export default function page() {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
+
+          <div className="flex items-center justify-center">
+            <Avatar sx={{ width: 45, height: 45, bgcolor: "#1E6F5C" }} />
+
+            <div className="ml-5">
+              <h2 className="text-lg font-bold">John Doe</h2>
+              <p className="text-sm">Admin</p>
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
 
@@ -116,14 +127,15 @@ export default function page() {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           marginTop: "2rem",
           display: "grid",
-          gap: "2rem"
+          gap: "2rem",
         }}
       >
+        {/* Content/Components here */}
+
         <div className="main-content-wrapper">
           <SalesSummary />
         </div>
 
-        {/* Content/Components here */}
         <div className="main-content-wrapper">
           <Products
             handleCloseModal={handleCloseModal}

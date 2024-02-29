@@ -141,6 +141,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 onChange={selectedCateg}
                 id="food-category"
                 className="input-field"
+                required
               >
                 {foodCategories.map((foodCategory) => (
                   <option key={foodCategory} value={foodCategory}>
@@ -163,9 +164,11 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 onChange={selectedSize}
                 id="food-category"
                 className="input-field"
+                required
               >
                 {selectedItem === undefined
-                  ? item.category.categName === "Meal" ||
+                  ? // For add item modal
+                    item.category.categName === "Meal" ||
                     item.category.categName === "Pasta"
                     ? foodSizes.map((foodSize) => (
                         <option key={foodSize} value={foodSize}>
@@ -177,7 +180,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                           {defaultSize}
                         </option>
                       ))
-                  : selectedItem.category?.categName === "Meal" ||
+                  : // Edit item modal
+                  selectedItem.category?.categName === "Meal" ||
                     selectedItem.category?.categName === "Pasta"
                   ? foodSizes.map((foodSize) => (
                       <option key={foodSize} value={foodSize}>
@@ -202,7 +206,8 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 }
                 onChange={itemName}
                 placeholder="Product name"
-                className="input-field "
+                className="input-field"
+                required
               />
             </div>
 
@@ -217,6 +222,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 }
                 placeholder="Product price"
                 className="input-field"
+                required
               />
             </div>
 
@@ -231,6 +237,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 onChange={itemCost}
                 placeholder="Product cost"
                 className="input-field"
+                required
               />
             </div>
 
@@ -241,11 +248,14 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                 <input
                   type="text"
                   defaultValue={
-                    selectedItem === undefined ? item.stock.count : selectedItem.stock?.count
+                    selectedItem === undefined
+                      ? item.stock.count
+                      : selectedItem.stock?.count
                   }
                   onChange={itemStock}
                   placeholder="Enter stock"
                   className="input-field "
+                  required
                 />
                 <select
                   defaultValue={
@@ -256,6 +266,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                   onChange={selectedMeasurement}
                   id="food-category"
                   className="input-field"
+                  required
                 >
                   {measurements.map((measurement) => (
                     <option key={measurement} value={measurement}>
