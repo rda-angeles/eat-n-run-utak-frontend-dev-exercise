@@ -19,6 +19,11 @@ Editing and deleting an item can be done by clicking the respective icon in the 
 
 ![image](https://github.com/rda-angeles/eat-n-run-utak-frontend-dev-exercise/assets/106044788/c5984127-9be7-4299-bdfc-a5f53bdf0b7c)
 
+## Entering order
+Inputting amount order in modal will automatically compute the sales as well as reduce the stock quantity or amount displayed.
+
+https://github.com/rda-angeles/eat-n-run-utak-frontend-dev-exercise/assets/106044788/2fc78066-74d5-4892-a1b2-47a1ba96d173
+
 
 # Getting Started
 
