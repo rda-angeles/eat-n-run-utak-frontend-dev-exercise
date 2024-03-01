@@ -51,7 +51,7 @@ const OrderModal = ({ open, handleCloseModal, selectedItem }: ModalTypes) => {
           <BtnComponent
             variant="contained"
             type="submit"
-            className="col-span-2 mt-[2rem]"
+            className="col-span-2 !mt-[2rem]"
             onClick={() => {
               addOrder(selectedItem, orderInput, handleCloseModal);
               setOrderInput("");
