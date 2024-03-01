@@ -37,7 +37,7 @@ const OrderModal = ({ open, handleCloseModal, selectedItem }: ModalTypes) => {
         <Box sx={style}>
           <h1 className="text-3xl mb-8">Order:</h1>
           <div>
-            <p>Enter order amount:</p>
+            <p className="mb-2">Enter order amount:</p>
             <input
               type="text"
               placeholder="Order amount"
@@ -51,7 +51,7 @@ const OrderModal = ({ open, handleCloseModal, selectedItem }: ModalTypes) => {
           <BtnComponent
             variant="contained"
             type="submit"
-            className="col-span-2 !mt-[2rem]"
+            className="col-span-2 !mt-[1rem]"
             onClick={() => {
               addOrder(selectedItem, orderInput, handleCloseModal);
               setOrderInput("");
