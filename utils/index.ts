@@ -8,6 +8,7 @@ import {
   query,
   onSnapshot,
   getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 
 import "firebase/firestore";
@@ -110,37 +111,41 @@ export const updateItem = async (
 
   const updateItemDoc = doc(db, "items", selectedItem.id);
 
-  await updateDoc(updateItemDoc, {
-    name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
-    category: {
-      categName:
-        item.category.categName === ""
-          ? selectedItem.category.categName.trim()
-          : item.category.categName.trim(),
-      size:
-        item.category.size === ""
-          ? selectedItem.category.size.trim()
-          : item.category.size.trim(),
-    },
-    price:
-      item.price === ""
-        ? parseFloat(selectedItem.price)
-        : parseFloat(item.price),
-    cost:
-      item.cost === "" ? parseFloat(selectedItem.cost) : parseFloat(item.cost),
-    stock: {
-      count:
-        item.stock.count === ""
-          ? parseFloat(selectedItem.stock.count)
-          : parseFloat(item.stock.count),
-      measurement:
-        item.stock.measurement === ""
-          ? selectedItem.stock.measurement.trim()
-          : item.stock.measurement.trim(),
-    },
-  });
+  if (parseFloat(item.stock.count) >= 5) {
+    await updateDoc(updateItemDoc, {
+      name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
+      category: {
+        categName:
+          item.category.categName === ""
+            ? selectedItem.category.categName.trim()
+            : item.category.categName.trim(),
+        size:
+          item.category.size === ""
+            ? selectedItem.category.size.trim()
+            : item.category.size.trim(),
+      },
+      price:
+        item.price === ""
+          ? parseFloat(selectedItem.price)
+          : parseFloat(item.price),
+      cost:
+        item.cost === ""
+          ? parseFloat(selectedItem.cost)
+          : parseFloat(item.cost),
+      stock: {
+        count:
+          item.stock.count === ""
+            ? parseFloat(selectedItem.stock.count)
+            : parseFloat(item.stock.count),
+        measurement:
+          item.stock.measurement === ""
+            ? selectedItem.stock.measurement.trim()
+            : item.stock.measurement.trim(),
+      },
+    });
 
-  handleCloseModal();
+    handleCloseModal();
+  }
 
   return {
     name: (item.name = ""),
@@ -160,7 +165,11 @@ export const updateItem = async (
 export const addOrder = async (
   item: {
     id: string;
+    name: string;
     price: number;
+    category: {
+      size: string;
+    };
     stock: {
       count: number;
       measurement: string;
@@ -178,7 +187,13 @@ export const addOrder = async (
     },
   });
 
-  handleCloseModal();
+  await addDoc(collection(db, "sales"), {
+    ordereddItem: item.name,
+    orderCount: parseFloat(orderInput),
+    orderSize: item.category.size,
+    totalAmount: item.price * parseFloat(orderInput),
+    timeStamp: serverTimestamp(),
+  });
 
-  return (orderInput = "");
+  handleCloseModal();
 };

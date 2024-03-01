@@ -50,6 +50,7 @@ export const salesSummaryContents = [
   {
     id: 2,
     header: "Sales",
+    content: "10,000php",
     bgColor: "#EE4266",
   },
   {

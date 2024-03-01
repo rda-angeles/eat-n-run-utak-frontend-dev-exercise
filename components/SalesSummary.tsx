@@ -8,7 +8,7 @@ import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "@/config/firebase";
 const SalesSummary = () => {
   const [productCount, setProductCount] = useState(0);
-  const [salesCount, setSalesCount] = useState(0);
+  const [totalSales, setTotalSales] = useState(0);
 
   useEffect(() => {
     const getProductCount = async () => {
@@ -21,6 +21,19 @@ const SalesSummary = () => {
         setProductCount(itemsArrCount.length);
       });
     };
+
+    const getTotalSales = async () => {
+      const fbQuery = query(collection(db, "sales"));
+      const unsubscribe = onSnapshot(fbQuery, (querySnapshot) => {
+        let totalSalesCount: number = 0;
+        querySnapshot.forEach((doc) => {
+          totalSalesCount += doc.data().totalAmount;
+        });
+        setTotalSales(totalSalesCount);
+      });
+    };
+
+    getTotalSales();
     getProductCount();
   }, []);
 
@@ -38,7 +51,7 @@ const SalesSummary = () => {
               content={content}
               bgColor={bgColor}
               productCount={productCount}
-              salesCount={salesCount}
+              totalSales={totalSales}
             />
           )
         )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BtnComponent } from "./";
 
 // Material ui
@@ -215,7 +215,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             <div>
               <p>Product price</p>
               <input
-                type="text"
+                type="number"
                 onChange={itemPrice}
                 defaultValue={
                   selectedItem === undefined ? item.price : selectedItem.price
@@ -230,7 +230,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
             <div>
               <p>Product cost</p>
               <input
-                type="text"
+                type="number"
                 defaultValue={
                   selectedItem === undefined ? item.cost : selectedItem.cost
                 }
@@ -246,7 +246,7 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
               <p>Amount in stock</p>
               <div className="flex items-center">
                 <input
-                  type="text"
+                  type="number"
                   defaultValue={
                     selectedItem === undefined
                       ? item.stock.count
@@ -275,6 +275,12 @@ const Modal = ({ handleCloseModal, open, selectedItem }: ModalTypes) => {
                   ))}
                 </select>
               </div>
+
+              {parseFloat(item.stock.count) < 5 && (
+                <p className="text-red-500 text-sm mt-1">
+                  Stock input must not be less than 5
+                </p>
+              )}
             </div>
 
             <BtnComponent

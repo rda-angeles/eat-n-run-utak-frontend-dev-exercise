@@ -101,7 +101,7 @@ export default function Products({
 
   return (
     <>
-      <h1 className="text-4xl font-bold">Inventory.</h1>
+      <h1 className="text-4xl font-bold">Products.</h1>
 
       <AddItemBtn
         handleCloseModal={handleCloseModal}
@@ -161,8 +161,20 @@ export default function Products({
                   </OrderBtnComponent>
                 </TableCell>
 
-                <TableCell style={{ width: 160 }} align="center">
-                  {item.stock.count} {item.stock.measurement}
+                <TableCell
+                  style={{
+                    width: item.stock.count < 5 ? 250 : 160,
+                    color: item.stock.count < 5 ? "red" : "black",
+                    fontWeight: item.stock.count < 5 ? "bold" : "normal",
+                  }}
+                  align="center"
+                >
+                  <div className="flex flex-col items-center justify-center">
+                    {item.stock.count} {item.stock.measurement}
+                    {item.stock.count < 5 && (
+                      <span className="mt-1">Low stock</span>
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell
                   align="center"

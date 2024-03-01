@@ -54,6 +54,7 @@ const OrderModal = ({ open, handleCloseModal, selectedItem }: ModalTypes) => {
             className="col-span-2 mt-[2rem]"
             onClick={() => {
               addOrder(selectedItem, orderInput, handleCloseModal);
+              setOrderInput("");
             }}
           >
             <div className="flex items-center">
