@@ -111,7 +111,10 @@ export const updateItem = async (
 
   const updateItemDoc = doc(db, "items", selectedItem.id);
 
-  if (parseFloat(item.stock.count) >= 5) {
+  if (
+    parseFloat(item.stock.count) >= 5 ||
+    parseFloat(selectedItem.stock.count) >= 5
+  ) {
     await updateDoc(updateItemDoc, {
       name: item.name === "" ? selectedItem.name.trim() : item.name.trim(),
       category: {
